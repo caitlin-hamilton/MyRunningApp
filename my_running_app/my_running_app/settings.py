@@ -119,3 +119,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# python manage.py makemigrations my_runs
+# python manage.py sqlmigrate my_runs 0001
+#python manage.py migrate --run-syncdb
+
+
+#python manage.py migrate --run-syncdb
+#https://www.dark-hamster.com/programming/how-to-resolve-error-message-django-core-exceptions-appregistrynotready-apps-arent-loaded-yet/

@@ -1,0 +1,15 @@
+{{ run.name }}
+{{ run.date }}
+{{run.distance }}
+{{ run.duration }}
+
+{% if split_list %}
+    <ul>
+    {% for split in split_list %}
+        <li>{{ split.split_number }}</li>
+        <li>{{ split.avg_pace }}</li>
+        <li>{{ split.elapsed_time}}</li>
+        <li>{{ split.moving_time}}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
