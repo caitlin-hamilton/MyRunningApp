@@ -38,9 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -100,6 +103,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CORS_ORIGIN_WHITELIST = (
+     'http://localhost:3000',
+ )
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -124,6 +131,6 @@ STATIC_URL = '/static/'
 # python manage.py sqlmigrate my_runs 0001
 #python manage.py migrate --run-syncdb
 
-
+#source env/bin/activate
 #python manage.py migrate --run-syncdb
 #https://www.dark-hamster.com/programming/how-to-resolve-error-message-django-core-exceptions-appregistrynotready-apps-arent-loaded-yet/
