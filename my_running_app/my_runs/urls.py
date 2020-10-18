@@ -10,8 +10,8 @@ from rest_framework import routers                    # add this
 from my_runs import views                            # add this
 
 router = routers.DefaultRouter()                      # add this
-router.register(r'run', views.RunView, 'run')
-router.register(r'split', views.SplitView, 'split')
+router.register(r'runs', views.RunView, 'runs')
+router.register(r'splits', views.SplitView, 'splits')
 
 urlpatterns = [
     # path('<int:run_id>/', run, name='run'),
