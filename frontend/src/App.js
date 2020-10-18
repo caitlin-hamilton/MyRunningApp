@@ -57,15 +57,22 @@ renderSplits = (run_id) => {
 renderRunAndSplits = () => {
   let arr = []
   let runs = this.state.runs;
-  
+
+}
+
+getSplitsById = (run_id) => {
+  let run_splits = this.state.splits[run_id]
+  console.log(typeof(run_splits))
+  console.log(run_splits)
+  return run_splits
 }
 
   render() 
     {
     return (
       <div>
-            {this.state.runs.map(item => <Run id={item.id} duration={item.duration} date={item.date} name={item.name} distance={item.distance} key={item.id}/>)}
-            {this.state.runs.map(run => {return this.renderSplits(run.id).map(split => split)})}
+            {this.state.runs.map(item => <Run id={item.id} duration={item.duration} date={item.date} name={item.name} distance={item.distance} key={item.id} splits={this.getSplitsById(item.id)}/>)}
+            {/* {this.state.runs.map(run => {return this.renderSplits(run.id).map(split => split)})} */}
       </div>
 
     )
