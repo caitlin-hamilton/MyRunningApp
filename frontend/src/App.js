@@ -2,7 +2,8 @@ import React from 'react';
 import axios from "axios";
 import './App.css';
 import Run from './Run';
-import Split from './Split';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import  { Container, Row, Col } from './reactstrap';
 
 class App extends React.Component {
   constructor(props) {
@@ -44,26 +45,8 @@ getSplits = (runs)  => {
   return splits
 }
 
-renderSplits = (run_id) => {
-  let run_splits = this.state.splits[run_id]
-  let arr = []
-  for(var i=0; i< run_splits.length -1; i++){
-    arr.push(<Split split_number={run_splits[i]['split_number']} elapsed_time={run_splits[i]['elapsed_time']} moving_time={run_splits[i]['moving_time']} avg_pace={run_splits[i]['avg_pace']}   />)
-  }
-  console.log(arr)
-  return arr
-}
-
-renderRunAndSplits = () => {
-  let arr = []
-  let runs = this.state.runs;
-
-}
-
 getSplitsById = (run_id) => {
   let run_splits = this.state.splits[run_id]
-  console.log(typeof(run_splits))
-  console.log(run_splits)
   return run_splits
 }
 
@@ -72,7 +55,6 @@ getSplitsById = (run_id) => {
     return (
       <div>
             {this.state.runs.map(item => <Run id={item.id} duration={item.duration} date={item.date} name={item.name} distance={item.distance} key={item.id} splits={this.getSplitsById(item.id)}/>)}
-            {/* {this.state.runs.map(run => {return this.renderSplits(run.id).map(split => split)})} */}
       </div>
 
     )

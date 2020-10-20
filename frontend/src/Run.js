@@ -1,7 +1,10 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col } from 'reactstrap';
+import  { Container, Row, Col } from './reactstrap';
 import Split from './Split';
+import { BiRun } from 'react-icons/bi';
+import {normalizeDistance, removeTimeZone, convertNumToTime} from './utils';
+
 
 export default class Run extends React.Component{
     constructor(props){
@@ -22,28 +25,12 @@ export default class Run extends React.Component{
         this.setState({
             id: this.props.id, 
             name : this.props.name,
-            date: this.removeTimeZone(this.props.date), 
-            distance : this.normalizeDistance(this.props.distance),
-            duration: this.convertNumToTime(this.props.duration),
+            date: removeTimeZone(this.props.date), 
+            distance : normalizeDistance(this.props.distance),
+            duration: convertNumToTime(this.props.duration),
             splits: this.props.splits
         })
       }
-
-    normalizeDistance(distance){
-        distance = distance/1000
-        return distance.toFixed(2)
-    }
-
-    removeTimeZone(date){
-        date = date.split("T")[0]
-        return date
-    }
-
-    convertNumToTime(number) {
-        var myDate = new Date(number *1000);
-        var gmtDate = new Date(myDate.toGMTString())
-        return gmtDate.getUTCHours() + ":" + gmtDate.getUTCMinutes() +":" + gmtDate.getUTCSeconds()
-    }
 
     toggleSplits() {
         let toggleValue = true ? this.state.showSplits === false : false
@@ -53,19 +40,31 @@ export default class Run extends React.Component{
     }
 
     render() {
-        console.log(this.state)
         return (
-            <Container>
-                <Row>
-                    <Col onClick={() => this.toggleSplits()}>{this.state.id}</Col>
-                    <Col>{this.state.name}</Col>
+            <Container style={{backgroundColor: '#f1f1f1', border: '10px solid white'}}>
+                <Row onClick={() => this.toggleSplits()}>
+                    <Col>{this.state.name} <BiRun size={32}/></Col>
+                </Row>
+                <Row onClick={() => this.toggleSplits()} style={{"border-top": '1px solid black'}}>
                     <Col>{this.state.date}</Col>
-                    <Col>{this.state.distance}</Col>
+                    <Col>{this.state.distance} km</Col>
                     <Col>{this.state.duration}</Col>
                 </Row>
-                <div>
-                    {this.state.showSplits && this.state.splits.map((item) => <Split split_number={item['split_number']} elapsed_time={this.convertNumToTime(item['elapsed_time'])} moving_time={this.convertNumToTime(item['moving_time'])} avg_pace={this.convertNumToTime(item['avg_pace'])}/>)}
-                </div>
+                <Row onClick={() => this.toggleSplits()}>
+                    <Col>Date</Col>
+                    <Col>Distance</Col>
+                    <Col>Time</Col>
+              </Row>
+                { this.state.showSplits && 
+                <Row style={{"border-top": '1px solid black'}}>
+                    <Col></Col>
+                    <Col>Split 1km</Col>
+                    <Col>Elapsed time</Col>
+                    <Col>Moving time</Col>
+                    <Col>Avg pace</Col>
+                </Row>
+                }
+                    {this.state.showSplits && this.state.splits.map((item) => <Split split_number={item['split_number']} elapsed_time={convertNumToTime(item['elapsed_time'])} moving_time={convertNumToTime(item['moving_time'])} avg_pace={this.convertNumToTime(item['avg_pace'])}/>)}
             </Container>
         )
     }
