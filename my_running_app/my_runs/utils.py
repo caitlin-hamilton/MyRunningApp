@@ -5,8 +5,7 @@ from manage import ROOT_DIR
 
 def read_text_file(text_file_path):
     with open(text_file_path, 'r') as txt_file:
-        data = txt_file.readlines()
-        data = [element.strip(r"\n").strip() for element in data]
+        data = [element.strip(r"\n").strip() for element in txt_file.readlines()]
     return data
 
 

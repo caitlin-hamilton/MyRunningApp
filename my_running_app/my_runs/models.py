@@ -22,6 +22,9 @@ class Split(models.Model):
     def __str__(self):
         return str(self.split_number)
 
-#'Split', 'Time', 'Moving Time', 'Distance', 'Elevation Gain', 'Elev Loss', 'Avg Pace', 'Avg Moving Paces', 'Best Pace', 'Avg Run Cadence', 'Max Run Cadence', 'Avg Stride Length', 'Avg HR', 'Max HR', 'Avg Temperature', 'Calories']
+# fields
+#'Split', 'Time', 'Moving Time', 'Distance', 'Elevation Gain', 'Elev Loss', 'Avg Pace',
+# 'Avg Moving Paces', 'Best Pace', 'Avg Run Cadence', 'Max Run Cadence', 'Avg Stride Length',
+# 'Avg HR', 'Max HR', 'Avg Temperature', 'Calories']
 
 

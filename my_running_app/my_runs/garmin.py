@@ -6,23 +6,21 @@ from garminconnect import (
     GarminConnectConnectionError,
     GarminConnectTooManyRequestsError,
     GarminConnectAuthenticationError,
-)
-#https://pypi.org/project/garminconnect/
-import sys
-sys.path.append("..")
+)  # #https://pypi.org/project/garminconnect/
 
 from my_runs.utils import read_text_file
 from manage import ROOT_DIR
+import csv
 
 logging.basicConfig(level=logging.DEBUG)
-today = date.today()
+URL = 'https://connect.garmin.com/modern/proxy/activity-service/activity/4347437241'
 
 
 class GarminPortal:
     _client = None
 
     def __init__(self):
-        self.activity_summary_output_path = os.path.join(ROOT_DIR, 'my_runs', 'garmin', str(today))
+        self.activity_summary_output_path = os.path.join(ROOT_DIR, 'my_runs', 'garmin', str(date.today()))
         self._create_output_directory()
         self._user_name, self._pw = read_text_file(os.path.join(ROOT_DIR, 'config/credentials.txt'))
         self._initialize_garmin_client()
@@ -64,21 +62,18 @@ class GarminPortal:
             print("Unknown error occurred during Garmin Connect Client login")
             raise Exception
 
-    def get_all_summary_activities(self):
-        activitiesurl = self._client.url_activities
-        activities = self._client.fetch_data(activitiesurl)
-        return activities
+    def get_activity(self):
+        activities = self._client.fetch_data(URL)
+        return [activities]
 
-    def get_new_summary_activties(self, activity_range: tuple):
+    def get_summary_activities(self, activity_range: tuple):
         activities = self._client.get_activities(*activity_range)
         return activities
 
     def download_summary_of_activities(self, activities):
-        import csv
-        keys = activities[0].keys()
         output_file = os.path.join(self.activity_summary_output_path, 'activity_summary.csv')
         with open(output_file, 'w', newline='') as output_file:
-            dict_writer = csv.DictWriter(output_file, keys)
+            dict_writer = csv.DictWriter(output_file, activities[0].keys())
             dict_writer.writeheader()
             dict_writer.writerows(activities)
 
@@ -123,8 +118,7 @@ class GarminPortal:
 
 if __name__ == '__main__':
     gp = GarminPortal()
-    # activities = gp.get_new_summary_activties((0, 3))
-    # gp.get_split_of_activities(activities)
+    activities = gp.get_new_summary_activities((0, 3))
 
 
 
