@@ -127,23 +127,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-import os
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
-    },
-}
-
-
 # python manage.py makemigrations my_runs
 # python manage.py sqlmigrate my_runs 0001
 #python manage.py migrate --run-syncdb

@@ -18,7 +18,10 @@ export default class Run extends React.Component{
             splits : [],
             showSplits: false
         }
-        this.toggleSplits = this.toggleSplits.bind(this)
+        this.toggleSplits = this.toggleSplits.bind(this);
+        this.findFastestSplit = this.findFastestSplit.bind(this);
+        this.formatSplits = this.formatSplits.bind(this);
+        
     }
 
     componentDidMount() {
@@ -28,7 +31,7 @@ export default class Run extends React.Component{
             date: removeTimeZone(this.props.date), 
             distance : normalizeDistance(this.props.distance),
             duration: convertNumToTime(this.props.duration),
-            splits: this.props.splits
+            splits: this.formatSplits(normalizeDistance(this.props.distance),this.props.splits),
         })
       }
 
@@ -39,33 +42,69 @@ export default class Run extends React.Component{
         })
     }
 
+    findFastestSplit(distance, splits) {
+        if(splits.length ===1){
+            return [1]
+        }
+        let sorted_splits = [...splits].sort(function(a,b) { return a.elapsed_time - b.elapsed_time;})
+        if(!this.checkIfSplitIsOneKm(distance)){
+            sorted_splits.shift()
+        }
+        let fastest_splits = this.checkIfTimeDuplicated(sorted_splits)
+        return fastest_splits
+    }
+
+    checkIfSplitIsOneKm(distance) {
+        if(distance % 1 === 0){
+            return true
+        }
+        return false
+    }
+
+    checkIfTimeDuplicated(splits){
+        let fastest_time = splits[0]['elapsed_time']
+        let dup_number = splits.filter((v) => (parseFloat(v['elapsed_time']) === parseFloat(fastest_time))).length;
+        let fastest_splits = splits.slice(0, dup_number).map(item => item['split_number'])
+        return fastest_splits
+    }
+
+    formatSplits(distance,splits){
+        let fastest_splits = this.findFastestSplit(distance, splits)
+        splits.forEach((item) => item['isFastest'] = fastest_splits.includes(item['split_number']) ? true: false)
+        return splits
+    }
+
+
     render() {
         return (
-            <Container style={{backgroundColor: '#f1f1f1', border: '10px solid white'}}>
-                <Row onClick={() => this.toggleSplits()}>
-                    <Col>{this.state.name} <BiRun size={32}/></Col>
-                </Row>
-                <Row onClick={() => this.toggleSplits()} style={{"border-top": '1px solid black'}}>
+            <div>
+            <Container width="50%" style={{backgroundColor: '#f1f1f1'}} className='mt-3'>
+                { <Row  onClick={() => this.toggleSplits()}>
+                    <Col> <BiRun size={32}/> {this.state.name}</Col>
+                </Row> }
+                <Row onClick={() => this.toggleSplits()} style={{"borderTop": '1px solid black'}}>
+                    <Col >{this.state.id}</Col>
                     <Col>{this.state.date}</Col>
-                    <Col>{this.state.distance} km</Col>
+                    <Col >{this.state.distance} km</Col>
                     <Col>{this.state.duration}</Col>
                 </Row>
                 <Row onClick={() => this.toggleSplits()}>
+                    <Col></Col>
                     <Col>Date</Col>
                     <Col>Distance</Col>
                     <Col>Time</Col>
-              </Row>
+                </Row> 
                 { this.state.showSplits && 
-                <Row style={{"border-top": '1px solid black'}}>
+                <Row style={{"borderTop": '1px solid black'}}>
                     <Col></Col>
                     <Col>Split 1km</Col>
-                    <Col>Elapsed time</Col>
-                    <Col>Moving time</Col>
-                    <Col>Avg pace</Col>
+                    <Col>Elapsed time (Mins)</Col>
+                    <Col>Moving time (Mins)</Col>
                 </Row>
                 }
-                    {this.state.showSplits && this.state.splits.map((item) => <Split split_number={item['split_number']} elapsed_time={convertNumToTime(item['elapsed_time'])} moving_time={convertNumToTime(item['moving_time'])} avg_pace={this.convertNumToTime(item['avg_pace'])}/>)}
             </Container>
+            {this.state.showSplits && this.state.splits.map((item) => <Split isFastest={item['isFastest']} split_number={item['split_number']} elapsed_time={item['elapsed_time']} moving_time={item['moving_time']}/>)}
+            </div>
         )
     }
 }
