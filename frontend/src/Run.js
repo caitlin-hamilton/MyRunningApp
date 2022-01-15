@@ -47,9 +47,9 @@ export default class Run extends React.Component{
             return [1]
         }
         let sorted_splits = [...splits].sort(function(a,b) { return a.elapsed_time - b.elapsed_time;})
-        if(!this.checkIfSplitIsOneKm(distance)){
-            sorted_splits.shift()
-        }
+//        if(!this.checkIfSplitIsOneKm(distance)){
+//            sorted_splits.shift()
+//        }
         let fastest_splits = this.checkIfTimeDuplicated(sorted_splits)
         return fastest_splits
     }
@@ -103,7 +103,7 @@ export default class Run extends React.Component{
                 </Row>
                 }
             </Container>
-            {this.state.showSplits && this.state.splits.map((item) => <Split isFastest={item['isFastest']} split_number={item['split_number']} elapsed_time={item['elapsed_time']} moving_time={item['moving_time']}/>)}
+            {this.state.showSplits && this.state.splits.map((item) => <Split key={item['split_number']}isFastest={item['isFastest']} split_number={item['split_number']} elapsed_time={item['elapsed_time']} moving_time={item['moving_time']}/>)}
             </div>
         )
     }

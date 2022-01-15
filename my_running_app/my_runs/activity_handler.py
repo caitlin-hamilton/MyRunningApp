@@ -4,15 +4,10 @@ import logging
 from datetime import datetime
 from my_runs.garmin import GarminPortal
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'my_running_app.settings'
-django.setup()
-from my_runs.models import Run, Split
-
-
 def get_data():
     """Pull data from garmin and create django entries"""
     garmin_portal = GarminPortal()
-    run_data = garmin_portal.get_summary_activities((0, 30)) # need to find a way of getting new data, not all data
+    run_data = garmin_portal.get_summary_activities((0, 20)) # need to find a way of getting new data, not all data
     for run in run_data:
         if run['activityType']['typeKey'] == 'running':
             split_data = garmin_portal.get_splits_of_activity(run['activityId'])
@@ -64,6 +59,9 @@ def convert_epoch_to_str(date: str, float_time: float):
 
 
 if __name__ == '__main__':
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'my_running_app.settings'
+    django.setup()
+    from my_runs.models import Run, Split
     Run.objects.all().delete()
     Split.objects.all().delete()
     get_data()
